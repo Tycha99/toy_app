@@ -3,6 +3,7 @@ require "test_helper"
 class MicropostsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @micropost = microposts(:one)
+    @user = users(:michael)  # Добавляем пользователя из фикстур
   end
 
   test "should get index" do
@@ -17,7 +18,12 @@ class MicropostsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create micropost" do
     assert_difference("Micropost.count") do
-      post microposts_url, params: { micropost: { content: @micropost.content, user_id: @micropost.user_id } }
+      post microposts_url, params: {
+        micropost: {
+          content: @micropost.content,
+          user_id: @user.id  # Используем существующего пользователя
+        }
+      }
     end
 
     assert_redirected_to micropost_url(Micropost.last)
@@ -34,7 +40,12 @@ class MicropostsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update micropost" do
-    patch micropost_url(@micropost), params: { micropost: { content: @micropost.content, user_id: @micropost.user_id } }
+    patch micropost_url(@micropost), params: {
+      micropost: {
+        content: @micropost.content,
+        user_id: @user.id
+      }
+    }
     assert_redirected_to micropost_url(@micropost)
   end
 
